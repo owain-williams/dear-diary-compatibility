@@ -1,6 +1,6 @@
 use rand::{Rng, SeedableRng};
 use rand_chacha::ChaCha8Rng;
-use std::io;
+use std::{io, num::ParseIntError};
 
 fn main() {
     let results = vec![
@@ -25,39 +25,42 @@ fn main() {
         "Be more careful about your feelings to him",
         "Happiness lies in knowing that you are both happy",
     ];
-    let mut dob_user = String::new();
-    let mut dob_partner = String::new();
 
-    // Get User's date of birth
+    // Get user's date of birth
     println!("Please enter your date of birth in the format DDMMYYYY");
-
-    io::stdin()
-        .read_line(&mut dob_user)
-        .expect("Failed to read line");
-
-    // Get Partner's date of birth
+    let dob_user_result = get_dob();
+    let dob_user = match dob_user_result {
+        Ok(val) => val,
+        Err(e) => panic!("{:?}", e),
+    };
+    // Get crush's date of birth
     println!("Please enter your crush's date of birth in the format DDMMYYYY");
-
-    io::stdin()
-        .read_line(&mut dob_partner)
-        .expect("Failed to read line");
-
-    // Parse DOBs
-    let dob_user = dob_user.trim().parse::<u64>();
-    let dob_user = match dob_user {
-        Ok(val) => val,
-        Err(e) => panic!("{:?}", e),
-    };
-    let dob_partner = dob_partner.trim().parse::<u64>();
-    let dob_partner = match dob_partner {
+    let dob_crush_result = get_dob();
+    let dob_crush = match dob_crush_result {
         Ok(val) => val,
         Err(e) => panic!("{:?}", e),
     };
 
-    let dob_sum = dob_user + dob_partner;
+    // Sum DOBs
+    let dob_sum = dob_user + dob_crush;
 
-    let mut rng = ChaCha8Rng::seed_from_u64(dob_sum);
+    // Get a Random Number using the summed DOBs as a Seed
+    let mut rng = ChaCha8Rng::seed_from_u64(dob_sum as u64);
     let seeded_random_number = rng.gen_range(0..results.len() - 1);
 
     println!("{}", results[seeded_random_number as usize]);
+}
+
+fn get_dob() -> Result<u32, ParseIntError> {
+    let mut dob = String::new();
+
+    // Get Date of Birth from user
+    io::stdin()
+        .read_line(&mut dob)
+        .expect("Failed to read line");
+
+    // Parse Date of Birth
+    let dob = dob.trim().parse::<u32>();
+
+    dob
 }
