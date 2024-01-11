@@ -1,4 +1,4 @@
-use dear_diary_match_maker::{get_dob, get_random_number_from_seed};
+use dear_diary_match_maker::{get_dob, random_number_from_seed};
 
 fn main() {
     let results = vec![
@@ -43,7 +43,7 @@ fn main() {
     let dob_sum = dob_user + dob_crush;
 
     // Get a Random Number using the summed DOBs as a Seed
-    let seeded_random_number = get_random_number_from_seed(dob_sum as u64, results.len() - 1);
+    let seeded_random_number = random_number_from_seed(dob_sum as u64, results.len() - 1);
 
     println!("Your advice is: {}", results[seeded_random_number as usize]);
 }

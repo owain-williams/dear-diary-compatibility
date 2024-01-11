@@ -16,8 +16,21 @@ pub fn get_dob() -> Result<u32, ParseIntError> {
     dob
 }
 
-pub fn get_random_number_from_seed(seed: u64, max: usize) -> usize {
+pub fn random_number_from_seed(seed: u64, max: usize) -> usize {
     let mut rng = ChaCha8Rng::seed_from_u64(seed);
     let seeded_random_number = rng.gen_range(0..max);
     seeded_random_number
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::random_number_from_seed;
+
+    #[test]
+    fn get_reliable_random_number_from_same_seed() {
+        let dob1 = 16011984;
+        let dob2 = 14051986;
+        let sum = dob1 + dob2;
+        assert_eq!(random_number_from_seed(sum, 20), 10);
+    }
 }
