@@ -1,6 +1,4 @@
-use rand::{Rng, SeedableRng};
-use rand_chacha::ChaCha8Rng;
-use std::{io, num::ParseIntError};
+use dear_diary_match_maker::{get_dob, get_random_number_from_seed};
 
 fn main() {
     let results = vec![
@@ -45,22 +43,7 @@ fn main() {
     let dob_sum = dob_user + dob_crush;
 
     // Get a Random Number using the summed DOBs as a Seed
-    let mut rng = ChaCha8Rng::seed_from_u64(dob_sum as u64);
-    let seeded_random_number = rng.gen_range(0..results.len() - 1);
+    let seeded_random_number = get_random_number_from_seed(dob_sum as u64, results.len() - 1);
 
-    println!("{}", results[seeded_random_number as usize]);
-}
-
-fn get_dob() -> Result<u32, ParseIntError> {
-    let mut dob = String::new();
-
-    // Get Date of Birth from user
-    io::stdin()
-        .read_line(&mut dob)
-        .expect("Failed to read line");
-
-    // Parse Date of Birth
-    let dob = dob.trim().parse::<u32>();
-
-    dob
+    println!("Your advice is: {}", results[seeded_random_number as usize]);
 }

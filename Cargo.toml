@@ -1,5 +1,5 @@
 [package]
-name = "dear-diary-compatibility"
+name = "dear-diary-match-maker"
 version = "0.1.0"
 edition = "2021"
 
